@@ -1,0 +1,82 @@
+[gd_scene load_steps=7 format=3 uid="uid://8wyyo7yrocri"]
+
+[ext_resource type="Texture2D" uid="uid://bnwf4nmhhpeg4" path="res://graphics/bg.jpg" id="1_tumq0"]
+[ext_resource type="Texture2D" uid="uid://cewvo4mje7ni5" path="res://graphics/toy.png" id="2_k5f4k"]
+[ext_resource type="PackedScene" uid="uid://hq0kvx6mh5w8" path="res://Scenes/player.tscn" id="3_6phgx"]
+[ext_resource type="PackedScene" uid="uid://d1f0l1s8ycval" path="res://Scenes/light.tscn" id="4_81xng"]
+[ext_resource type="PackedScene" uid="uid://bhiaj8ndkpae0" path="res://Scenes/music.tscn" id="5_wqkje"]
+
+[sub_resource type="FontFile" id="FontFile_wqkje"]
+cache/0/50/0/ascent = 0.0
+cache/0/50/0/descent = 0.0
+cache/0/50/0/underline_position = 0.0
+cache/0/50/0/underline_thickness = 0.0
+cache/0/50/0/scale = 1.0
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+
+[node name="Level" type="Node2D"]
+
+[node name="BG" type="Sprite2D" parent="."]
+position = Vector2(579, 324)
+scale = Vector2(0.397874, 0.339668)
+texture = ExtResource("1_tumq0")
+
+[node name="Toy" type="Sprite2D" parent="."]
+position = Vector2(622, 367)
+scale = Vector2(0.423799, 0.257667)
+texture = ExtResource("2_k5f4k")
+
+[node name="Player" parent="." instance=ExtResource("3_6phgx")]
+position = Vector2(560, 359)
+
+[node name="Music" parent="." instance=ExtResource("5_wqkje")]
+
+[node name="GameOverLabel" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 539.0
+offset_top = 375.0
+offset_right = 659.0
+offset_bottom = 415.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.745098, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0.87451, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = SubResource("FontFile_wqkje")
+theme_override_font_sizes/font_size = 50
+text = "GAME OVER"
+uppercase = true
+
+[node name="ScoreLabel" type="Label" parent="."]
+offset_right = 64.0
+offset_bottom = 42.0
+theme_override_colors/font_color = Color(0.839216, 0.752941, 0, 1)
+theme_override_font_sizes/font_size = 20
+
+[node name="RestartButton" type="Button" parent="."]
+offset_left = 478.0
+offset_top = 425.0
+offset_right = 718.0
+offset_bottom = 456.0
+text = "RE-START or Re-Run the Game"
+
+[node name="MessageLabel" type="Label" parent="."]
+visible = false
+offset_left = 420.0
+offset_top = 18.0
+offset_right = 665.0
+offset_bottom = 81.0
+theme_override_colors/font_color = Color(0.823529, 0.992157, 0, 1)
+
+[node name="Light" parent="." instance=ExtResource("4_81xng")]
+position = Vector2(680, 294)
+
+[connection signal="pressed" from="RestartButton" to="Player" method="_on_restart_button_pressed"]
