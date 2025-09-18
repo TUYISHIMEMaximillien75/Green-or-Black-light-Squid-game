@@ -11,12 +11,12 @@ const SCREEN_HEIGHT = 648
 var can_move = true
 var timer = 0.0
 var total_time_survived = 0.0
-var idle_time = 0.0  # counts how long player stands still during green light
+var idle_time = 0.0 
 
 var score_label
 var game_over_label
 var restart_button
-var message_label  # New message label for on-screen text
+var message_label 
 
 func _ready():
 	position = Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT)
@@ -25,37 +25,35 @@ func _ready():
 	can_move = true
 	idle_time = 0.0
 
-	score_label = get_node("../ScoreLabel")   # Adjust path if needed
+	score_label = get_node("../ScoreLabel") 
 	score_label.text = "Score: 0"
 	
-	game_over_label = get_node("../GameOverLabel") # Adjust path if needed
+	game_over_label = get_node("../GameOverLabel") 
 	game_over_label.visible = false
 
-	restart_button = get_node("../RestartButton") # Adjust path if needed
+	restart_button = get_node("../RestartButton") 
 	restart_button.visible = false
 
-	message_label = get_node("../MessageLabel")  # Add your message label node path here
+	message_label = get_node("../MessageLabel")  
 	message_label.text = ""
 	message_label.visible = false
 
 func _physics_process(delta):
+	#print(5)
+	#print(Global.testNum)
 	timer += delta
-
-	if can_move and timer > 5.0:
-		# Switch to red light (stop)
+	if can_move and timer > Global.timer1:
 		can_move = false
 		timer = 0.0
 		game_over_label.visible = false
-		_show_message("Black light! Stop moving!")
+		_show_message("Block light! Stop moving!")
 
-	elif not can_move and timer > 7.0:
-		# Switch back to green light (go)
+	elif not can_move and timer > Global.timer1:
 		can_move = true
 		timer = 0.0
 		game_over_label.visible = false
 		_show_message("Green light! You can move now!")
-
-	# Track if player moves during green light, else increase idle_time
+	
 	var is_moving = (
 		Input.is_action_pressed("ui_up") or
 		Input.is_action_pressed("ui_down") or
@@ -65,24 +63,24 @@ func _physics_process(delta):
 
 	if can_move:
 		if is_moving:
-			idle_time = 0.0  # reset idle timer when moving
+			idle_time = 0.0  
 		else:
 			idle_time += delta
-			if idle_time > 3.0:
-				# Player failed by standing still too long during green light
-				_show_message("You stood still too long during green light! GAME OVER!")
+			if idle_time > Global.idle_time:
+				
+				_show_message("Yoi stood stil too long during green light! GAME OVER!")
 				game_over_label.visible = true
 				restart_button.visible = true
 				get_tree().paused = true
 
-	# During red light: if player tries to move → game over
+	
 	if not can_move and is_moving:
 		_show_message("You moved during Black light! GAME OVER!")
 		game_over_label.visible = true
 		restart_button.visible = true
-		get_tree().paused = true  # Pause game on fail
+		get_tree().paused = true  
 
-	# Score counting - add delta only if player is alive and not moved during red
+	
 	if not get_tree().paused:
 		total_time_survived += delta
 		score_label.text = "Score: " + str(int(total_time_survived))
